@@ -28,8 +28,9 @@ RUN npm install -g claude-flow@${CLAUDE_FLOW_VERSION} @anthropic-ai/claude-code@
 RUN mkdir -p /home/claude/.claude-flow && \
     chown -R claude:claude /home/claude
 
-# Switch to non-root user
-USER claude
+# Note: Running as root to avoid permission issues with mounted volumes
+# The container is still isolated from the host system
+# USER claude
 
 # Set environment variables
 ENV NODE_ENV=production \

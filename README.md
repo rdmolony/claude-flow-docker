@@ -4,13 +4,14 @@ Run [Claude Flow](https://github.com/ruvnet/claude-flow) in Docker to work on yo
 
 ## Quick Start
 
-Start an interactive shell with Claude Flow available:
+Start an interactive shell with Claude Flow available, sharing your Claude configuration:
 
 ```bash
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
-  -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
+  -v $HOME/.claude:/home/claude/.claude \
+  -v $HOME/.claude.json:/home/claude/.claude.json \
   $(docker build -q https://github.com/rdmolony/claude-flow-docker.git)
 ```
 
@@ -45,7 +46,8 @@ docker run -it --rm \
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
-  -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
+  -v $HOME/.claude:/home/claude/.claude \
+  -v $HOME/.claude.json:/home/claude/.claude.json \
   $(docker build -q https://github.com/rdmolony/claude-flow-docker.git) \
   claude-flow swarm "refactor this codebase for better performance"
 ```
@@ -58,9 +60,10 @@ To keep Claude Flow configuration between runs:
 # Create alias for convenience
 alias claude-flow='docker run -it --rm \
   -v $(pwd):/workspace \
+  -v $HOME/.claude:/home/claude/.claude \
+  -v $HOME/.claude.json:/home/claude/.claude.json \
   -v $HOME/.claude-flow:/home/claude/.claude-flow \
   -w /workspace \
-  -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
   $(docker build -q https://github.com/rdmolony/claude-flow-docker.git)'
 
 # Now use like a regular command
@@ -74,8 +77,8 @@ claude-flow hive-mind status
 - **claude-flow@alpha** - Latest alpha version
 - **@anthropic-ai/claude-code** - Claude Code CLI integration  
 - **Runtime tools** - git, bash, curl, jq
-- **Security** - Runs as non-root user
 - **Your code** - Mounted at `/workspace`
+- **Config access** - Compatible with mounted host config files
 
 ## Alternative Methods
 
