@@ -1,36 +1,6 @@
-# Copied from https://github.com/ruvnet/claude-flow/blob/111288bf7f290136a7f1ee0ba55549071d6dacca/archive/infrastructure/docker/Dockerfile
+# Minimal Claude Flow Docker Image
+# Installs claude-flow and @anthropic-ai/claude-code from npm
 
-# Claude Flow Docker Image
-# Multi-stage build for optimal size and security
-
-# Stage 1: Build environment
-FROM node:20-alpine AS builder
-
-# Install build dependencies
-RUN apk add --no-cache \
-    git \
-    python3 \
-    make \
-    g++ \
-    bash
-
-# Set working directory
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci --only=production && \
-    npm cache clean --force
-
-# Copy source code
-COPY . .
-
-# Build the project
-RUN npm run build || echo "No build step"
-
-# Stage 2: Runtime environment
 FROM node:20-alpine
 
 # Install runtime dependencies
@@ -47,12 +17,8 @@ RUN addgroup -g 1001 -S claude && \
 # Set working directory
 WORKDIR /app
 
-# Copy from builder
-COPY --from=builder --chown=claude:claude /app/node_modules ./node_modules
-COPY --from=builder --chown=claude:claude /app/package*.json ./
-COPY --from=builder --chown=claude:claude /app/bin ./bin
-COPY --from=builder --chown=claude:claude /app/src ./src
-COPY --from=builder --chown=claude:claude /app/cli.js ./cli.js
+# Install claude-flow and claude-code globally as root
+RUN npm install -g claude-flow@alpha @anthropic-ai/claude-code
 
 # Create directories for user
 RUN mkdir -p /home/claude/.claude-flow && \
@@ -71,7 +37,7 @@ EXPOSE 3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node -e "console.log('healthy')" || exit 1
+    CMD claude-flow --version || exit 1
 
 # Default command
 ENTRYPOINT ["claude-flow"]
