@@ -4,49 +4,50 @@ Run [Claude Flow](https://github.com/ruvnet/claude-flow) in Docker to work on yo
 
 ## Quick Start
 
-Run Claude Flow on your current directory:
+Start an interactive shell with Claude Flow available:
 
 ```bash
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
   -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
-  $(docker build -q https://github.com/rdmolony/claude-flow-docker.git) \
-  [command]
+  $(docker build -q https://github.com/rdmolony/claude-flow-docker.git)
 ```
 
-## Common Usage
+Once inside the container:
+```bash
+# Initialize Claude Flow
+claude-flow init
 
-### Initialize Claude Flow in your project
+# Run AI swarm on your code
+claude-flow swarm "refactor this codebase"
+
+# Start Hive Mind wizard
+claude-flow hive-mind wizard
+
+# Use with Claude Code CLI
+claude-flow swarm "build API" --claude
+```
+
+## Direct Command Execution
+
+You can also run commands directly without entering the shell:
 
 ```bash
+# Initialize Claude Flow in your project
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
   $(docker build -q https://github.com/rdmolony/claude-flow-docker.git) \
-  init
-```
+  claude-flow init
 
-### Run AI swarm on your codebase
-
-```bash
+# Run AI swarm on your codebase
 docker run -it --rm \
   -v $(pwd):/workspace \
   -w /workspace \
   -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
   $(docker build -q https://github.com/rdmolony/claude-flow-docker.git) \
-  swarm "refactor this codebase for better performance"
-```
-
-### Start Hive Mind wizard
-
-```bash
-docker run -it --rm \
-  -v $(pwd):/workspace \
-  -w /workspace \
-  -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
-  $(docker build -q https://github.com/rdmolony/claude-flow-docker.git) \
-  hive-mind wizard
+  claude-flow swarm "refactor this codebase for better performance"
 ```
 
 ## Persistent Configuration

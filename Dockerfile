@@ -43,6 +43,6 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD claude-flow --version || exit 1
 
-# Default command
-ENTRYPOINT ["claude-flow"]
-CMD ["--help"]
+# Default to bash shell for interactive use
+# Can be overridden by passing commands directly
+CMD ["/bin/bash"]
