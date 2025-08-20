@@ -3,6 +3,10 @@
 
 FROM node:20-alpine
 
+# Build arguments for package versions
+ARG CLAUDE_FLOW_VERSION=alpha
+ARG CLAUDE_CODE_VERSION=latest
+
 # Install runtime dependencies
 RUN apk add --no-cache \
     git \
@@ -18,7 +22,7 @@ RUN addgroup -g 1001 -S claude && \
 WORKDIR /app
 
 # Install claude-flow and claude-code globally as root
-RUN npm install -g claude-flow@alpha @anthropic-ai/claude-code
+RUN npm install -g claude-flow@${CLAUDE_FLOW_VERSION} @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
 # Create directories for user
 RUN mkdir -p /home/claude/.claude-flow && \

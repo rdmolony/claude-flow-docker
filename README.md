@@ -91,6 +91,26 @@ docker run -it --rm -v $(pwd):/workspace -w /workspace claude-flow init
 docker run -it --rm -v $(pwd):/workspace -w /workspace claude-flow swarm "analyze code"
 ```
 
+### Custom versions
+
+Specify different versions of claude-flow or claude-code:
+
+```bash
+# Use specific versions
+docker build -t claude-flow \
+  --build-arg CLAUDE_FLOW_VERSION=2.0.0-alpha.90 \
+  --build-arg CLAUDE_CODE_VERSION=1.0.51 \
+  https://github.com/rdmolony/claude-flow-docker.git
+
+# Use latest stable versions
+docker build -t claude-flow \
+  --build-arg CLAUDE_FLOW_VERSION=latest \
+  --build-arg CLAUDE_CODE_VERSION=latest \
+  https://github.com/rdmolony/claude-flow-docker.git
+```
+
+Default versions: `claude-flow@alpha` and `@anthropic-ai/claude-code@latest`
+
 ### Without volume mounting
 
 For testing or help commands:
